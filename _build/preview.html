@@ -1,0 +1,6 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="../css/fonts.css"><link rel="stylesheet" href="../css/main.css?p=1">
+<style>body{background:#241910;padding:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}body::after{display:none}div{border:1px solid #444;padding:8px;color:#ccc;font:12px monospace}.wide{grid-column:span 3}</style></head><body>
+<script>
+const names=['bulk','pp','paper','coal','special','loop','dieline','print','tile-bulk','tile-pp','tile-paper','tile-coal','tile-special','panorama'];
+Promise.all(names.map(n=>fetch('out/'+n+'.svg?'+Date.now()).then(r=>r.text()).then(t=>{const d=document.createElement('div');if(n==='panorama')d.className='wide';d.innerHTML=n+t;document.body.appendChild(d);})));
+</script></body></html>
