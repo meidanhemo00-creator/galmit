@@ -11,29 +11,24 @@
   /* ---------- Category data (verified against galmit.co.il) ---------- */
   const CATEGORIES = {
     bulk: {
-      name: 'שקי ענק', tag: 'FIBC · BULK BAG', cta: 'שקי ענק',
-      desc: 'שקי ענק (באלות, ביג בג) לאריזת חומרים בכמויות גדולות. עשויים פוליפרופילן ארוג ולא ממוחזר עם UV.',
-      opts: ['מגוון מידות במלאי השוטף', 'פוליפרופילן ארוג ולא ממוחזר, עם UV', 'הדפסה עד 4 צבעים']
+      name: 'ביג בג', tag: 'FIBC · BIG BAG', cta: 'ביג בג',
+      desc: 'ביג בג (שקי ענק) לאריזה ולשינוע של חומרים בכמויות גדולות. כל שק נבנה לפי מה שאתם צריכים: מידה, מבנה, לולאות והדפסה.',
+      opts: ['מידה ומבנה בהתאמה אישית', 'פוליפרופילן ארוג ולא ממוחזר, עם UV', 'הדפסה עד 4 צדדים', 'מגוון מידות זמינות במלאי']
     },
     pp: {
-      name: 'שקי פוליפרופילן', tag: 'PP WOVEN SACK', cta: 'שקי פוליפרופילן',
-      desc: 'שקים קטנים עשויים פוליפרופילן ארוג, לאריזה ולשינוע של חומרים בכמויות קטנות יותר.',
-      opts: ['מגוון מידות לפי צורכי הלקוח', 'מגוון משקלים', 'בד פוליפרופילן ארוג']
-    },
-    paper: {
-      name: 'שקיות נייר', tag: 'KRAFT · 1 KG', cta: 'שקיות נייר',
-      desc: 'שקיות נייר 1 ק״ג למילוי קמח, סוכר, מלח ועוד.',
-      opts: ['ייצור מקומי (כחול-לבן) ו/או ייבוא', 'עיצוב גרפיקה בליווי צמוד לפי דרישה', 'אספקה: 7 ימי עסקים מיום אישור הגלופות']
+      name: 'שקי פייה ופוליפרופילן', tag: 'VALVE · PP WOVEN', cta: 'שקי פייה ופוליפרופילן',
+      desc: 'שקי פייה (VALVE) במגוון רחב של סוגים ומידות, למילוי מהיר ונקי במכונה. לצדם שקי פוליפרופילן ארוגים במגוון מידות ומשקלים.',
+      opts: ['הרבה סוגי פייה, לכל קו מילוי', 'תחתית מרובעת שעומדת יציב על המשטח', 'בד ארוג לא ממוחזר', 'הדפסה עד 4 צדדים']
     },
     coal: {
       name: 'שקי פחם', tag: 'CHARCOAL BAG', cta: 'שקי פחם',
       desc: 'שקי פחם במגוון מידות, למשקלים שונים, זמינים במלאי השוטף.',
-      opts: ['ידית אחיזה בשקים עד 4 ק״ג', 'גרפיקה בעיצוב אישי', 'מגוון מידות במלאי']
+      opts: ['ידית אחיזה בשקים עד 4 ק״ג', 'גרפיקה בעיצוב אישי, בלי עלות', 'מגוון מידות במלאי']
     },
-    special: {
-      name: 'שקים מיוחדים ועזרים', tag: 'VALVE · THREAD', cta: 'שקים מיוחדים ועזרים',
-      desc: 'שקי פייה (VALVE) מבד פוליפרופילן ארוג לא ממוחזר, עם פיית מילוי ותחתית מרובעת. לצדם, חוטי פוליאתילן לתפירת שקים.',
-      opts: ['פיית מילוי ותחתית מרובעת', 'חוטי תפירה במגוון משקלים, למכונות ידניות ואוטומטיות', 'חוטים בצבעים שונים לפי הזמנה']
+    thread: {
+      name: 'חוטי תפירה', tag: 'SEWING THREAD', cta: 'חוטי תפירה',
+      desc: 'חוטי פוליאתילן לתפירת שקים, למכונות ידניות ואוטומטיות.',
+      opts: ['מגוון משקלים במלאי', 'צבעים שונים לפי הזמנה']
     }
   };
   const ORDER = Object.keys(CATEGORIES);
@@ -222,31 +217,55 @@
     if (a.getAttribute('href') === '#contact') setCategory(CATEGORIES[key].name);
   }));
 
-  /* ---------- Finder ---------- */
+  /* ---------- Finder: 3 steps -> ready WhatsApp message to Amit ---------- */
   const finder = $('[data-finder]');
   const fForm = $('[data-finder-form]', finder);
   const steps = $$('.finder__step', finder);
   const summary = $('.finder__summary', finder);
   const progress = $$('[data-progress]', finder);
   const backBtn = $('[data-finder-back]', finder);
+  const nextBtn = $('[data-finder-next]', finder);
   const nav = $('[data-finder-nav]', finder);
   const status = $('[data-finder-status]', finder);
   const numEl = $('[data-finder-num]', finder);
   const view = $('[data-stage-view]', finder);
   const stageName = $('[data-stage-name]', finder);
   const tag = $('[data-tag]', finder);
-  const KEY = { 'שקי ענק': 'bulk', 'שקי פוליפרופילן': 'pp', 'שקיות נייר': 'paper', 'שקי פחם': 'coal' };
-  const answers = {};
+  const WA_NUMBER = '972522227856';
+  const ART = { 'ביג בג': 'bulk', 'הכל': 'bulk', 'שקי פייה': 'pp', 'שקי פוליפרופילן': 'pp', 'שקי פחם': 'coal' };
+  const fdName = $('#fd-name'), fdCompany = $('#fd-company'), fdQty = $('#fd-qty');
+  const fdErr = $('[data-fd-err]', finder);
   let stepIdx = 0;
-  let advanceTimer = 0;
+  let logoURL = '';
 
-  const suggest = () => {
-    const m = answers.material || '', n = answers.need || '', ind = answers.industry || '';
-    if (m === 'פחם') return 'שקי פחם';
-    if (n === 'אריזה בכמויות גדולות' || m.startsWith('חול')) return 'שקי ענק';
-    if (m.startsWith('קמח') && ind === 'מזון') return 'שקיות נייר';
-    if (m.startsWith('קמח') || m.startsWith('גרגרים')) return 'שקי פוליפרופילן';
-    return '';
+  const picked = (name) => $$(`input[name="${name}"]:checked`, fForm).map((i) => i.value);
+  // "הכל" stands for every option; show it as such in the message
+  const pickedText = (name) => {
+    const v = picked(name);
+    if (!v.includes('הכל')) return v.join(', ');
+    return name === 'product' ? 'כל המוצרים' : v.filter((x) => x !== 'הכל').join(', ');
+  };
+  const stepValid = (i) => {
+    if (i === 0) return picked('product').length > 0;
+    if (i === 1) return picked('need').length > 0;
+    if (i === 2) return fdName.value.trim().length >= 2;
+    return true;
+  };
+
+  const message = () => {
+    const lines = ['היי עמית, הגעתי מהאתר של חמו גלמית.', `שם: ${fdName.value.trim()}`];
+    if (fdCompany.value.trim()) lines.push(`חברה: ${fdCompany.value.trim()}`);
+    lines.push(`מתעניינים ב: ${pickedText('product')}`);
+    lines.push(`חשוב לנו: ${pickedText('need')}`);
+    if (fdQty.value.trim()) lines.push(`כמות משוערת: ${fdQty.value.trim()}`);
+    if (logoURL) lines.push('יש לנו לוגו, אשלח אותו כאן.');
+    return lines.join('\n');
+  };
+
+  const updateNav = () => {
+    nextBtn.disabled = !stepValid(stepIdx);
+    status.textContent = stepIdx === 2 ? 'שלב 3 מתוך 3' : (nextBtn.disabled ? 'בחרו תשובה כדי להמשיך' : `שלב ${stepIdx + 1} מתוך 3`);
+    nextBtn.textContent = stepIdx === 2 ? 'הכנת ההודעה' : 'המשך';
   };
 
   const showStep = (i) => {
@@ -262,36 +281,29 @@
     numEl.textContent = String(Math.min(i + 1, 3)).padStart(2, '0');
     tag.classList.toggle('is-ready', i >= steps.length);
     if (i < steps.length) {
-      status.textContent = `שלב ${i + 1} מתוך 3`;
+      updateNav();
     } else {
-      const s = suggest();
-      const hint = $('[data-sum="hint"]', summary);
-      hint.replaceChildren();
-      if (s) {
-        hint.append('כיוון ראשוני לבדיקה: ', Object.assign(document.createElement('strong'), { textContent: s }), '. את ההתאמה הסופית בודקים יחד עם הצוות.');
-      } else {
-        hint.textContent = 'הצוות יעזור לכם לבחור את סוג האריזה המתאים, לפי החומר והשימוש.';
-      }
-      if (answers.need === 'הדפסה על האריזה') hint.append(' כדאי לציין בפנייה כמה צבעים נדרשים ואם יש קובץ גרפי.');
-      summary.dataset.suggest = s;
+      const text = message();
+      $('[data-wa-preview]', summary).textContent = text;
+      $('[data-wa-send]', summary).href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
       summary.focus({ preventScroll: true });
     }
   };
 
   // Live brief: the tag fills and the stage draws the likely packaging as answers come in
-  let logoURL = '';
   const renderLive = (changed) => {
-    ['industry', 'material', 'need'].forEach((k) => {
+    const vals = { product: pickedText('product'), need: pickedText('need'), company: fdCompany.value.trim() };
+    Object.entries(vals).forEach(([k, val]) => {
       const dd = $(`[data-sum="${k}"]`, tag);
-      const v = answers[k] || '—';
+      const v = val || '—';
       if (dd.textContent !== v) {
         dd.textContent = v;
         const row = dd.parentElement;
         if (k === changed) { row.classList.remove('is-new'); void row.offsetWidth; row.classList.add('is-new'); }
       }
     });
-    const s = suggest();
-    const key = KEY[s] || (logoURL ? 'bulk' : 'none');
+    const first = picked('product').find((v) => ART[v]);
+    const key = ART[first] || (logoURL ? 'bulk' : 'none');
     if (view.dataset.current !== key) {
       view.dataset.current = key;
       $$('[data-art]', view).forEach((a) => {
@@ -299,7 +311,7 @@
         if (a.dataset.art === key) requestAnimationFrame(() => requestAnimationFrame(() => a.classList.add('is-drawn')));
       });
     }
-    stageName.textContent = s || (answers.material ? 'נבחר יחד עם הצוות' : 'עוד לא נבחר');
+    stageName.textContent = first ? (first === 'הכל' ? 'כל המשפחות' : first) : (picked('product').length ? 'נבחר יחד עם הצוות' : 'עוד לא נבחר');
   };
 
   // Logo try-on: local preview only, nothing is uploaded
@@ -315,75 +327,79 @@
     stage.classList.toggle('has-logo', !!url);
     logoClear.hidden = !url;
     logoLabel.textContent = url ? 'החלפת לוגו' : 'העלו לוגו וראו אותו על השק';
-    if (url && view.dataset.current === 'none') { view.dataset.current = 'bulk'; $('[data-art="bulk"]', view).classList.add('is-drawn'); stageName.textContent = 'שק ענק, להמחשה'; }
+    if (url && view.dataset.current === 'none') { view.dataset.current = 'bulk'; $('[data-art="bulk"]', view).classList.add('is-drawn'); stageName.textContent = 'ביג בג, להמחשה'; }
   };
   logoInput.addEventListener('change', () => {
     const file = logoInput.files[0];
     if (!file) return;
     if (!/^image\/(png|jpeg|svg\+xml|webp)$/.test(file.type)) { logoNote.textContent = 'אפשר להעלות PNG, JPG, SVG או WEBP.'; return; }
     if (file.size > 5 * 1024 * 1024) { logoNote.textContent = 'הקובץ גדול מ-5MB. נסו קובץ קטן יותר.'; return; }
-    logoNote.textContent = 'הקובץ נשאר אצלכם בדפדפן ולא נשלח. ההדמיה להמחשה בלבד. כשתשלחו את הפנייה, צרפו את הלוגו למייל.';
+    logoNote.textContent = 'הקובץ נשאר אצלכם בדפדפן ולא נשלח. ההדמיה להמחשה בלבד. את הלוגו אפשר לשלוח לעמית בווטסאפ.';
     setLogo(URL.createObjectURL(file));
   });
   logoClear.addEventListener('click', () => { logoInput.value = ''; setLogo(''); logoInput.focus(); });
 
+  // Checkbox groups: "הכל" toggles every option; "עוד לא יודעים" is exclusive
   fForm.addEventListener('change', (e) => {
     const input = e.target;
-    if (input.type !== 'radio') return;
-    answers[input.name] = input.value;
+    if (input.type !== 'checkbox') return;
+    const group = $$(`input[name="${input.name}"]`, fForm);
+    const all = group.find((i) => 'all' in i.dataset);
+    const none = group.find((i) => 'none' in i.dataset);
+    const regular = group.filter((i) => i !== all && i !== none);
+    if (input === all) { regular.forEach((i) => { i.checked = all.checked; }); if (none && all.checked) none.checked = false; }
+    else if (input === none) { if (none.checked) { regular.forEach((i) => { i.checked = false; }); if (all) all.checked = false; } }
+    else {
+      if (none && input.checked) none.checked = false;
+      if (all) all.checked = regular.every((i) => i.checked);
+    }
     renderLive(input.name);
-    clearTimeout(advanceTimer);
-    const go = () => {
-      showStep(stepIdx + 1);
-      if (stepIdx < steps.length) steps[stepIdx].querySelector('input')?.focus({ preventScroll: true });
-    };
-    // A short pause lets the selection register visually; keyboard users can keep arrowing.
-    advanceTimer = setTimeout(go, reduceMotion.matches ? 0 : 320);
+    updateNav();
   });
-  // Arrow keys inside a radio group fire "change" too; don't auto-advance for those, wait for Enter/Space.
-  fForm.addEventListener('keydown', (e) => {
-    if (e.target.type !== 'radio') return;
-    if (e.key.startsWith('Arrow')) {
-      setTimeout(() => clearTimeout(advanceTimer), 0);
-    }
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      answers[e.target.name] = e.target.value;
-      e.target.checked = true;
-      renderLive(e.target.name);
-      showStep(stepIdx + 1);
-      if (stepIdx < steps.length) steps[stepIdx].querySelector('input')?.focus({ preventScroll: true });
-    }
+  fForm.addEventListener('input', (e) => {
+    if (e.target.type !== 'text') return;
+    if (e.target === fdName && fdName.value.trim().length >= 2) { fdErr.textContent = ''; fdName.setAttribute('aria-invalid', 'false'); }
+    renderLive(e.target === fdCompany ? 'company' : '');
+    updateNav();
   });
-  fForm.addEventListener('submit', (e) => e.preventDefault());
+  const goNext = () => {
+    if (!stepValid(stepIdx)) {
+      if (stepIdx === 2) { fdErr.textContent = 'נא למלא שם.'; fdName.setAttribute('aria-invalid', 'true'); fdName.focus(); }
+      return;
+    }
+    showStep(stepIdx + 1);
+    if (stepIdx < steps.length) steps[stepIdx].querySelector('input')?.focus({ preventScroll: true });
+  };
+  nextBtn.addEventListener('click', goNext);
+  fForm.addEventListener('submit', (e) => { e.preventDefault(); goNext(); });
+  fForm.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.type === 'text') { e.preventDefault(); goNext(); } });
   backBtn.addEventListener('click', () => {
     showStep(Math.max(0, stepIdx - 1));
     steps[stepIdx].querySelector('input:checked, input')?.focus({ preventScroll: true });
   });
   $('[data-finder-restart]', finder).addEventListener('click', () => {
     fForm.reset();
-    Object.keys(answers).forEach((k) => delete answers[k]);
+    fdErr.textContent = '';
     renderLive();
     showStep(0);
     steps[0].querySelector('input')?.focus({ preventScroll: true });
   });
+  // Email fallback: copy the brief into the contact form
   $('[data-finder-send]', finder).addEventListener('click', () => {
-    const s = summary.dataset.suggest;
-    if (s) setCategory(s);
-    const lines = [
-      `תחום: ${answers.industry}`,
-      `חומר לאריזה: ${answers.material}`,
-      `דרישה עיקרית: ${answers.need}`,
-      '',
-      ...(logoURL ? ['לוגו: אצרף את קובץ הלוגו למייל.'] : []),
-      'פרטים נוספים (כמויות, מידות, הדפסה):',
-      ''
-    ].join('\n');
+    const prods = picked('product');
+    const one = prods.length === 1 ? prods[0] : '';
+    const map = { 'ביג בג': 'ביג בג', 'שקי פייה': 'שקי פייה ופוליפרופילן', 'שקי פוליפרופילן': 'שקי פייה ופוליפרופילן', 'שקי פחם': 'שקי פחם', 'חוטי תפירה': 'חוטי תפירה' };
+    if (map[one]) setCategory(map[one]);
+    $('#f-name').value ||= fdName.value.trim();
+    $('#f-company').value ||= fdCompany.value.trim();
+    const lines = [`מתעניינים ב: ${pickedText('product')}`, `חשוב לנו: ${pickedText('need')}`];
+    if (fdQty.value.trim()) lines.push(`כמות משוערת: ${fdQty.value.trim()}`);
+    const text = lines.join('\n') + '\n';
     const prev = fNeed.value.trim();
-    fNeed.value = prev && !prev.startsWith('תחום:') ? `${lines}\n${prev}` : lines;
-    setTimeout(() => $('#f-name').focus({ preventScroll: true }), 650);
+    fNeed.value = prev && !prev.startsWith('מתעניינים ב:') ? `${text}\n${prev}` : text;
+    setTimeout(() => $('#f-phone').focus({ preventScroll: true }), 650);
   });
-  status.textContent = 'בחרו תשובה כדי להמשיך';
+  updateNav();
 
   /* ---------- Materials: one card open at a time ---------- */
   const mcards = $$('[data-mcard]');
