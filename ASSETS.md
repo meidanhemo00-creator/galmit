@@ -38,8 +38,4 @@ All from Unsplash (Unsplash License), graded to one warm low-saturation look by 
 | File | Unsplash photo |
 |---|---|
 | `assets/photo/hero-*` | photo-1777432048471-d6fae85832f9 (bulk bags stacked outdoors) |
-| `assets/photo/loop-*` | photo-1632516153538-cecbce23c978 (bulk bag lifting loop) |
 | `assets/photo/warehouse-*` | photo-1710141530542-f792450e736e (warehouse of stacked white bags) |
-| `assets/photo/sacks-*` | photo-1745680636997-dca47973113d (white woven sacks) |
-| `assets/photo/thread-*` | photo-1782232191606-8e2523a3fe80 (industrial thread spools) |
-| `assets/photo/charcoal-*` | photo-1781292428336-1be78d2867e0 (charcoal) |

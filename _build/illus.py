@@ -417,6 +417,29 @@ def scene_special(pid='iv'):
     return s.svg('30 0 540 420', 'איור טכני של שק פייה עם תחתית מרובעת, לצד גליל חוט תפירה')
 
 
+def scene_valve(pid='ivl'):
+    s = Scene(pid, 17, 300, 280)
+    s.floor_grid(-6, 22, -6, 16, 2)
+    s.block_bag(0.5, 1.0, 8.5, 4.6, 9.0, 'woven', valve=True, printarea=False, dims=True)
+    s.flush()
+    s.shadow(16, 4, 8, 3.4)
+    for i, r in enumerate([0.0, 0.06, -0.05]):
+        s.pillow(16 + (i % 2) * .2, 4, i * 2.05, rot=r, L=9.5, Wd=5.6)
+    s.marker((1.9, 7.6, 10.2), 'A', -40, -34)
+    return s.svg('30 0 560 420', 'איור טכני של שק פייה עם תחתית מרובעת, לצד ערימת שקי פוליפרופילן')
+
+
+def scene_thread(pid='ith'):
+    s = Scene(pid, 20, 300, 300)
+    s.floor_grid(-6, 18, -6, 16, 2)
+    s.cone(3.0, 3.0, 0, h=7.2, r0=2.3, r1=1.0); s.flush()
+    s.cone(9.0, 2.6, 0, h=6.0, r0=2.0, r1=.85); s.flush()
+    s.cone(14.4, 2.2, 0, h=4.8, r0=1.6, r1=.7); s.flush()
+    s.dim((0.7, 5.3, 0), (5.3, 5.3, 0), (0, 1.6, 0), 'Ø')
+    s.marker((3.0, 3.0, 7.4), 'A', -44, -30)
+    return s.svg('30 20 540 400', 'איור טכני של גלילי חוט תפירה בשלושה גדלים')
+
+
 def scene_tile(kind, pid, logo=False):
     """compact versions for the category strip"""
     s = Scene(pid, 12, 200, 170)
@@ -438,6 +461,12 @@ def scene_tile(kind, pid, logo=False):
         s.k = 11.5; s.block_bag(0.5, 3, 6, 2.2, 11, 'woven', handle=True); s.flush(); s.block_bag(8.2, 2.5, 5, 1.9, 8.6, 'woven', handle=True); s.flush(); s.block_bag(14.6, 2, 3.9, 1.6, 6.4, 'woven', handle=True)
         if logo: s.logo_slot((0.5 + 6 * .16, 5.22, 11 * .6), (1, 0, 0), (0, 0, -1), 6 * .68, 11 * .36)
         return s.svg('60 0 300 230')
+    if kind == 'valve':
+        s.k = 12; s.block_bag(0.5, 1, 8.5, 4.6, 9, 'woven', valve=True, printarea=False)
+        return s.svg('60 20 280 220')
+    if kind == 'thread':
+        s.k = 14; s.cone(3.0, 3.0, 0, h=7.2, r0=2.3, r1=1.0); s.flush(); s.cone(8.6, 2.4, 0, h=5.4, r0=1.8, r1=.8)
+        return s.svg('60 20 280 220')
     if kind == 'special':
         s.k = 12; s.block_bag(0.5, 1, 8.5, 4.6, 9, 'woven', valve=True, printarea=False); s.cone(13.5, 3.5, 0)
         return s.svg('60 20 280 220')
@@ -579,6 +608,10 @@ if __name__ == '__main__':
         write('tile-' + k, scene_tile(k, 't' + k[:2]))
     for k in ('bulk', 'pp', 'paper', 'coal'):
         write('fd-' + k, scene_tile(k, 'f' + k[:2], logo=True))
+    write('valve', scene_valve())
+    write('thread', scene_thread())
+    for k in ('valve', 'thread'):
+        write('tile-' + k, scene_tile(k, 't' + k[:2]))
     write('panorama', scene_panorama())
     write('loop', scene_loop())
     write('dieline', scene_dieline())
