@@ -317,13 +317,17 @@
       });
     }
     stageName.textContent = first ? (first === 'הכל' ? 'כל המשפחות' : first) : (picked('product').length ? 'נבחר יחד עם הצוות' : 'עוד לא נבחר');
-    // what goes inside: draw the first chosen material as a heap next to the bag
+    // what goes inside: the chosen material fills the bag (x-ray look)
     const MAT = { 'קמח ואבקות': 'flour', 'סוכר ומלח': 'sugar', 'גרגרים, זרעים ומספוא': 'grain', 'חול וחומרי בנייה': 'sand', 'פחם': 'coal' };
     const matVal = picked('material').find((v) => MAT[v]);
-    const matKey = MAT[matVal] || '';
-    $$('[data-mat]', view).forEach((m) => m.classList.toggle('is-on', m.dataset.mat === matKey));
-    $('[data-mat-name]', view).textContent = matVal || '';
-    view.classList.toggle('has-mat', !!matKey);
+    view.dataset.mat = MAT[matVal] || '';
+    if (matVal) {
+      if (view.dataset.current === 'none') {
+        view.dataset.current = 'bulk';
+        $('[data-art="bulk"]', view).classList.add('is-drawn');
+      }
+      stageName.textContent = `${first && first !== 'הכל' ? first : 'ביג בג'} · ${matVal.split(',')[0].split(' ')[0]}`;
+    }
   };
 
   // Logo try-on: local preview only, nothing is uploaded

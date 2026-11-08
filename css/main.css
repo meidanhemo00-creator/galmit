@@ -915,3 +915,12 @@ body::after {
 .il-pebble { fill: rgba(31,26,22,.12); stroke: currentColor; stroke-width: .6; }
 .il-chunk { fill: color-mix(in srgb, var(--ink) 82%, var(--brown)); stroke: var(--ink); stroke-width: .6; }
 .fstage__mat, .fstage__matname { width: min(46%, 270px); left: 4%; }
+
+/* finder: the material fills the bag itself */
+.fstage__view .fstage__art .il-face-r, .fstage__view .fstage__art .il-face-l, .fstage__view .fstage__art .il-face-t { transition: fill .4s var(--ease); }
+.fstage__view[data-mat="sand"] .fstage__art .il-face-t { fill: url(#pm-sand); }
+.fstage__view[data-mat="flour"] .fstage__art .il-face-t { fill: url(#pm-flour); }
+.fstage__view[data-mat="sugar"] .fstage__art .il-face-t { fill: url(#pm-sugar); }
+.fstage__view[data-mat="grain"] .fstage__art .il-face-t { fill: url(#pm-grain); }
+.fstage__view[data-mat="coal"] .fstage__art .il-face-t { fill: url(#pm-coal); }
+.fstage__view[data-mat]:not([data-mat=""]) .fstage__art .il-tex-top { opacity: 0 !important; }

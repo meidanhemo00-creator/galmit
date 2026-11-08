@@ -159,7 +159,7 @@ class Scene:
             self.add('body', l, 'il-tex', f' fill="url(#{wl})"')
             if draw_top:
                 wt = self.weave((1, 0, 0), (0, 1, 0))
-                self.add('body', t, 'il-tex', f' fill="url(#{wt})"')
+                self.add('body', t, 'il-tex il-tex-top', f' fill="url(#{wt})"')
         # hidden back edges (x-ray)
         Ab = A(0, 0, 0)
         self.add('xray', self.path([('M', Ab), ('L', Bb), ('M', Ab), ('L', Db), ('M', Ab), ('L', At)]), 'il-hidden')
@@ -290,7 +290,7 @@ class Scene:
         self.add('body', mid, 'il-face-l', f'')
         self.add('body', top, 'il-face-t il-draw', f' pathLength="1"')
         wv = self.weave((ca, sa, 0), (-sa, ca, 0), step=0.28)
-        self.add('body', top, 'il-tex', f' fill="url(#{wv})"')
+        self.add('body', top, 'il-tex il-tex-top', f' fill="url(#{wv})"')
         if ends:
             for x in (0.7, L - 0.7):
                 self.add('glow', self.path([('M', R(x, 0.5, z + t - .05)), ('L', R(x, Wd - 0.5, z + t - .05))]), 'il-stitch')
@@ -695,8 +695,6 @@ if __name__ == '__main__':
         write('fd-' + k, scene_tile(k, 'f' + k[:2], logo=True))
     write('valve', scene_valve())
     write('valve-flat', scene_valve_flat())
-    for k in ('flour', 'sugar', 'grain', 'sand', 'coal'):
-        write('mat-' + k, scene_material(k))
     write('thread', scene_thread())
     for k in ('valve', 'thread'):
         write('tile-' + k, scene_tile(k, 't' + k[:2]))
