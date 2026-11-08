@@ -861,3 +861,6 @@ body::after {
 .cat { grid-template-columns: 1fr 96px; padding: 28px 18px; }
 .cat__name { font-size: 1.12rem; }
 @media (max-width: 759px) { .explorer__tabs [role="tab"]:last-child { grid-column: span 2; } }
+/* client logos in their own colours */
+.clients__list img { opacity: 1; max-height: 58px; }
+.clients__list img[src*="roth"], .clients__list img[src*="mifratz"], .clients__list img[src*="shtibel"] { max-height: 70px; }

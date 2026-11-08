@@ -41,3 +41,5 @@ All from Unsplash (Unsplash License), graded to one warm low-saturation look by 
 | `assets/photo/warehouse-*` | photo-1710141530542-f792450e736e (warehouse of stacked white bags) |
 
 | `assets/brand/pashut-yarok.webp` | Pashut Yarok logo (logo-2026.png from ~/Developer/pashut-yarok), links to pashutyarok.co.il | Partner brand asset |
+
+Client logos switched to original colours (2026-11-08, user request). Added: `roth.png` (טחנת קמח רוט, cut from a flour-bag artwork the user supplied, recoloured to its green), `hamama.png` (חממה מאיר סחר, from hamama.biz header, 270x60 source; ask for a larger file).
