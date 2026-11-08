@@ -237,7 +237,7 @@
   const stageName = $('[data-stage-name]', finder);
   const tag = $('[data-tag]', finder);
   const WA_NUMBER = '972522227856';
-  const ART = { 'ביג בג': 'bulk', 'הכל': 'bulk', 'שקי פייה': 'pp', 'שקי פוליפרופילן': 'pp', 'שקי פחם': 'coal' };
+  const ART = { 'ביג בג': 'bulk', 'הכל': 'bulk', 'שקי פייה': 'pp', 'שקי פוליפרופילן': 'pp', 'שקי פחם': 'coal', 'חוטי תפירה': 'thread' };
   const fdName = $('#fd-name'), fdCompany = $('#fd-company'), fdQty = $('#fd-qty');
   const fdErr = $('[data-fd-err]', finder);
   let stepIdx = 0;
@@ -317,32 +317,75 @@
       });
     }
     stageName.textContent = first ? (first === 'הכל' ? 'כל המשפחות' : first) : (picked('product').length ? 'נבחר יחד עם הצוות' : 'עוד לא נבחר');
-    // what goes inside: the chosen material fills the bag (x-ray look)
-    const MAT = { 'קמח ואבקות': 'flour', 'סוכר ומלח': 'sugar', 'גרגרים, זרעים ומספוא': 'grain', 'חול וחומרי בנייה': 'sand', 'פחם': 'coal' };
-    const matVal = picked('material').find((v) => MAT[v]);
-    view.dataset.mat = MAT[matVal] || '';
-    requestAnimationFrame(placePour); setTimeout(placePour, 750);
-    if (matVal) {
-      if (view.dataset.current === 'none') {
-        view.dataset.current = 'bulk';
-        $('[data-art="bulk"]', view).classList.add('is-drawn');
-      }
-      stageName.textContent = `${first && first !== 'הכל' ? first : 'ביג בג'} · ${matVal.split(',')[0].split(' ')[0]}`;
-    }
+    const KIND = { 'ביג בג': 'bulk', 'הכל': 'bulk', 'שקי פייה': 'valve', 'שקי פוליפרופילן': 'pp', 'שקי פחם': 'coal' };
+    bag3d.dataset.kind = KIND[first] || 'bulk';
+    // thread is not a bag: no 360 view for it
+    const isThread = first === 'חוטי תפירה';
+    modeBtn.disabled = isThread;
+    if (isThread && view.dataset.mode === '3d') setMode(false);
   };
 
-  // Filling: hang the spout over the centre of the open top and pour the chosen material in
-  function placePour() {
-    const art = $(`[data-art="${view.dataset.current}"]`, view);
-    const top = art && art.querySelector('.il-face-t');
-    const pouring = !!view.dataset.mat && view.dataset.current === 'bulk' && !!top;
-    view.toggleAttribute('data-pouring', pouring);
-    if (!pouring) return;
-    const vr = view.getBoundingClientRect(), r = top.getBoundingClientRect();
-    view.style.setProperty('--px', `${r.left + r.width / 2 - vr.left}px`);
-    view.style.setProperty('--py', `${r.top + r.height * .5 - vr.top}px`);
-  }
-  window.addEventListener('resize', () => requestAnimationFrame(placePour));
+  // 360 mockup: a CSS 3D bag you can spin, with a logo you can drag and resize
+  const bag3d = $('[data-bag3d]', finder);
+  const spin = $('[data-spin]', bag3d);
+  const modeBtn = $('[data-mode3d]', finder);
+  const autoBtn = $('[data-autospin]', finder);
+  const sizeBox = $('[data-logosize]', finder);
+  const sizeInput = $('[data-logo-size]', finder);
+  const logo3d = $('[data-logo3d]', bag3d);
+  let rx = -14, ry = -32, spinning = false, spinRaf = 0;
+  const applyRot = () => { spin.style.setProperty('--rx', `${rx}deg`); spin.style.setProperty('--ry', `${ry}deg`); };
+  const setMode = (on) => {
+    view.dataset.mode = on ? '3d' : '2d';
+    modeBtn.setAttribute('aria-pressed', String(on));
+    autoBtn.hidden = !on;
+    if (!on) setSpin(false);
+  };
+  const setSpin = (on) => {
+    spinning = on; autoBtn.setAttribute('aria-pressed', String(on));
+    autoBtn.textContent = on ? 'עצירת סיבוב' : 'סיבוב אוטומטי';
+    cancelAnimationFrame(spinRaf);
+    if (on) { const tick = () => { ry -= .45; applyRot(); spinRaf = requestAnimationFrame(tick); }; spinRaf = requestAnimationFrame(tick); }
+  };
+  modeBtn.addEventListener('click', () => setMode(view.dataset.mode !== '3d'));
+  autoBtn.addEventListener('click', () => setSpin(!spinning));
+  // drag to rotate
+  let drag = null;
+  bag3d.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('[data-logo3d]')) return;
+    drag = { x: e.clientX, y: e.clientY, rx, ry }; bag3d.setPointerCapture(e.pointerId); bag3d.classList.add('is-dragging'); setSpin(false);
+  });
+  bag3d.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    ry = drag.ry + (e.clientX - drag.x) * .5;
+    rx = Math.max(-40, Math.min(12, drag.rx - (e.clientY - drag.y) * .3));
+    applyRot();
+  });
+  const endDrag = () => { drag = null; bag3d.classList.remove('is-dragging'); };
+  bag3d.addEventListener('pointerup', endDrag); bag3d.addEventListener('pointercancel', endDrag);
+  bag3d.addEventListener('keydown', (e) => {
+    const step = { ArrowLeft: -15, ArrowRight: 15 }[e.key];
+    if (step) { e.preventDefault(); setSpin(false); ry += step; applyRot(); }
+  });
+  // drag the logo on the front face
+  let lx = 50, ly = 56, ldrag = null;
+  const applyLogo = () => { logo3d.style.setProperty('--lx', `${lx}%`); logo3d.style.setProperty('--ly', `${ly}%`); logo3d.style.setProperty('--ls', String(sizeInput.value / 100)); };
+  logo3d.addEventListener('pointerdown', (e) => {
+    e.stopPropagation(); setSpin(false);
+    const face = logo3d.parentElement;
+    ldrag = { x: e.clientX, y: e.clientY, lx, ly, w: face.offsetWidth, h: face.offsetHeight, flip: Math.cos(ry * Math.PI / 180) < 0 ? -1 : 1 };
+    logo3d.setPointerCapture(e.pointerId); logo3d.classList.add('is-dragging');
+  });
+  logo3d.addEventListener('pointermove', (e) => {
+    if (!ldrag) return;
+    lx = Math.max(8, Math.min(92, ldrag.lx + (e.clientX - ldrag.x) / ldrag.w * 100 * ldrag.flip));
+    ly = Math.max(10, Math.min(92, ldrag.ly + (e.clientY - ldrag.y) / ldrag.h * 100));
+    applyLogo();
+  });
+  const endLogo = () => { ldrag = null; logo3d.classList.remove('is-dragging'); };
+  logo3d.addEventListener('pointerup', endLogo); logo3d.addEventListener('pointercancel', endLogo);
+  sizeInput.addEventListener('input', applyLogo);
+  applyRot(); applyLogo(); setMode(false);
 
   // Logo try-on: local preview only, nothing is uploaded
   const stage = $('.fstage', finder);
@@ -355,6 +398,9 @@
     logoURL = url;
     $$('.il-logo image', stage).forEach((im) => { if (url) im.setAttribute('href', url); else im.removeAttribute('href'); });
     stage.classList.toggle('has-logo', !!url);
+    logo3d.hidden = !url; sizeBox.hidden = !url;
+    if (url) { $('img', logo3d).src = url; setMode(true); rx = -10; ry = -18; applyRot(); }
+    else $('img', logo3d).removeAttribute('src');
     logoClear.hidden = !url;
     logoLabel.textContent = url ? 'החלפת לוגו' : 'העלו לוגו וראו אותו על השק';
     if (url && view.dataset.current === 'none') { view.dataset.current = 'bulk'; $('[data-art="bulk"]', view).classList.add('is-drawn'); stageName.textContent = 'ביג בג, להמחשה'; }

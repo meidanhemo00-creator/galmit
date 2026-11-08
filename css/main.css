@@ -916,36 +916,51 @@ body::after {
 .il-chunk { fill: color-mix(in srgb, var(--ink) 82%, var(--brown)); stroke: var(--ink); stroke-width: .6; }
 .fstage__mat, .fstage__matname { width: min(46%, 270px); left: 4%; }
 
-/* finder: the material fills the bag itself */
-.fstage__view .fstage__art .il-face-r, .fstage__view .fstage__art .il-face-l, .fstage__view .fstage__art .il-face-t { transition: fill .4s var(--ease); }
-.fstage__view[data-mat="sand"] .fstage__art .il-face-t { fill: url(#pm-sand); }
-.fstage__view[data-mat="flour"] .fstage__art .il-face-t { fill: url(#pm-flour); }
-.fstage__view[data-mat="sugar"] .fstage__art .il-face-t { fill: url(#pm-sugar); }
-.fstage__view[data-mat="grain"] .fstage__art .il-face-t { fill: url(#pm-grain); }
-.fstage__view[data-mat="coal"] .fstage__art .il-face-t { fill: url(#pm-coal); }
-.fstage__view[data-mat]:not([data-mat=""]) .fstage__art .il-tex-top { opacity: 0 !important; }
 
-/* finder: animated filling from a spout */
-.pour { position: absolute; z-index: 3; left: var(--px, 50%); top: 0; height: var(--py, 40%); width: 90px; translate: -50% 0; display: flex; flex-direction: column; align-items: center; opacity: 0; transition: opacity .4s var(--ease); pointer-events: none; }
-.fstage__view[data-pouring] .pour { opacity: 1; }
-.pour__nozzle { width: 90px; height: 70px; flex: none; overflow: visible; }
-.pour__hopper { fill: var(--cream); stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; }
-.pour__pipe { fill: none; stroke: var(--ink); stroke-width: 1.2; }
-.pour__band { stroke: var(--brown); stroke-width: 3; }
-.pour__lip { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
-.pour__stream { position: relative; flex: 1; width: 22px; overflow: hidden; }
-.pour__stream::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 10px; translate: -50% 0; background: var(--pour-col, #c4a87a); opacity: .35; border-radius: 0 0 5px 5px; }
-.pour__stream i { position: absolute; left: calc(50% + var(--x)); top: -10px; width: var(--pw, 4px); height: var(--ph, 4px); margin-left: calc(var(--pw, 4px) / -2); border-radius: var(--pr, 50%); background: var(--pour-col, #c4a87a); box-shadow: 0 0 0 .5px rgba(31,26,22,.35); animation: pour-fall 1.1s linear var(--d) infinite; }
-@keyframes pour-fall { from { top: -10px; } to { top: 100%; } }
-.fstage__view[data-mat="sand"]  { --pour-col: #c4a87a; }
-.fstage__view[data-mat="flour"] { --pour-col: #fbf8f2; --pw: 3px; --ph: 3px; }
-.fstage__view[data-mat="sugar"] { --pour-col: #ffffff; --pw: 4px; --ph: 4px; --pr: 1px; }
-.fstage__view[data-mat="grain"] { --pour-col: #c9a86e; --pw: 4px; --ph: 7px; --pr: 50%; }
-.fstage__view[data-mat="coal"]  { --pour-col: #2a221c; --pw: 7px; --ph: 6px; --pr: 2px; }
-.fstage__view[data-mat="flour"] .pour__stream::before { opacity: .8; box-shadow: 0 0 0 .5px rgba(31,26,22,.25); }
-@media (prefers-reduced-motion: reduce) { .pour__stream i { animation: none; top: calc(var(--d) * 600%); } }
-.pour { top: 12px; height: calc(var(--py, 40%) - 12px); }
-.fstage__view[data-pouring] .fstage__art { translate: 0 11%; scale: .8; }
-.pour__pile { flex: none; width: 74px; height: 20px; margin-top: -9px; background: var(--pour-col, #c4a87a); border: 1px solid var(--ink); border-bottom: 0; border-radius: 50% 50% 0 0 / 100% 100% 0 0; background-image: radial-gradient(rgba(31,26,22,.35) .7px, transparent 1px); background-size: 6px 6px; animation: pile-grow 2.4s var(--ease-out) both; transform-origin: bottom; }
-.fstage__view[data-mat="coal"] .pour__pile { background-image: radial-gradient(rgba(245,241,234,.25) 1px, transparent 1.4px); }
-@keyframes pile-grow { from { transform: scale(.2, .1); } to { transform: none; } }
+/* =========================================================
+   360 mockup: CSS 3D bag
+   ========================================================= */
+.bag3d { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; perspective: 1000px; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); touch-action: none; outline: none; }
+.fstage__view[data-mode="3d"] .bag3d { opacity: 1; pointer-events: auto; cursor: grab; }
+.fstage__view[data-mode="3d"] .bag3d.is-dragging { cursor: grabbing; }
+.fstage__view[data-mode="3d"] .fstage__art, .fstage__view[data-mode="3d"] .fstage__ghost { opacity: 0 !important; }
+.bag3d:focus-visible { outline: 2px solid var(--brown); outline-offset: -6px; }
+.bag3d__spin { --w: 190px; --h: 200px; --d: 190px; position: relative; width: var(--w); height: var(--h); margin-top: 28px; transform-style: preserve-3d; transform: rotateX(var(--rx, -14deg)) rotateY(var(--ry, -32deg)); }
+.bag3d[data-kind="valve"] .bag3d__spin { --w: 170px; --h: 210px; --d: 90px; }
+.bag3d[data-kind="pp"] .bag3d__spin { --w: 160px; --h: 230px; --d: 46px; }
+.bag3d[data-kind="coal"] .bag3d__spin { --w: 140px; --h: 210px; --d: 56px; }
+.bag3d__face { position: absolute; top: 0; left: 50%; height: var(--h); box-sizing: border-box; border: 1.2px solid var(--ink); background-color: #efe9de;
+  background-image: repeating-linear-gradient(0deg, rgba(31,26,22,.07) 0 1px, transparent 1px 5px), repeating-linear-gradient(90deg, rgba(31,26,22,.05) 0 1px, transparent 1px 5px);
+  backface-visibility: hidden; }
+.f-front { width: var(--w); margin-left: calc(var(--w) / -2); transform: translateZ(calc(var(--d) / 2)); }
+.f-back { width: var(--w); margin-left: calc(var(--w) / -2); transform: rotateY(180deg) translateZ(calc(var(--d) / 2)); background-color: #e6dfd2; }
+.f-right { width: var(--d); margin-left: calc(var(--d) / -2); transform: rotateY(90deg) translateZ(calc(var(--w) / 2)); background-color: #e2dacc; }
+.f-left { width: var(--d); margin-left: calc(var(--d) / -2); transform: rotateY(-90deg) translateZ(calc(var(--w) / 2)); background-color: #d9d0c1; }
+.f-top { width: var(--w); height: var(--d); margin-left: calc(var(--w) / -2); top: calc(var(--d) / -2); transform: rotateX(90deg); background-color: #f3eee5; backface-visibility: visible; }
+.bag3d__floor { position: absolute; left: 50%; width: calc(var(--w) * 1.5); height: calc(var(--d) * 1.5); margin-left: calc(var(--w) * -.75); top: calc(var(--h) - var(--d) * .75); transform: rotateX(90deg); background: radial-gradient(closest-side, rgba(31,26,22,.22), transparent); }
+.bag3d__seam { position: absolute; inset: 6px; border: 1px dashed rgba(31,26,22,.28); pointer-events: none; }
+.bag3d__loop { position: absolute; top: -30px; width: 30px; height: 44px; border: 5px solid #e9e2d5; border-bottom: 0; border-radius: 16px 16px 0 0; box-shadow: 0 0 0 1px var(--ink), inset 0 0 0 1px var(--ink); }
+.bag3d__loop.l1 { left: 4px; } .bag3d__loop.l2 { right: 4px; }
+.bag3d:not([data-kind="bulk"]) .bag3d__loop { display: none; }
+.bag3d[data-kind="coal"] .f-front::after { content: ""; position: absolute; left: 50%; top: 14px; width: 40px; height: 12px; margin-left: -20px; border: 1.2px solid var(--ink); border-radius: 8px; background: rgba(31,26,22,.1); }
+.bag3d__logo { position: absolute; left: var(--lx, 50%); top: var(--ly, 56%); width: calc(var(--w) * var(--ls, .45)); translate: -50% -50%; cursor: move; touch-action: none; padding: 4px; border: 1px dashed transparent; }
+.bag3d__logo:hover, .bag3d__logo.is-dragging { border-color: var(--brown); }
+.bag3d__logo img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; pointer-events: none; user-select: none; }
+.logotry__btn--solid { background: none; color: inherit; font: inherit; font-weight: 600; }
+.logotry__btn--solid[aria-pressed="true"] { background: var(--cream); color: var(--ink); border-color: var(--cream); border-style: solid; }
+.logosize { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: .92rem; }
+.logosize input { flex: 1 1 160px; accent-color: var(--cream); }
+.logosize__hint { flex-basis: 100%; font-size: .84rem; color: var(--soft); }
+@media (max-width: 759px) { .bag3d__spin { --w: 150px; --h: 160px; --d: 150px; } .bag3d[data-kind="valve"] .bag3d__spin { --w: 140px; --h: 170px; --d: 74px; } .bag3d[data-kind="pp"] .bag3d__spin { --w: 130px; --h: 186px; --d: 38px; } .bag3d[data-kind="coal"] .bag3d__spin { --w: 116px; --h: 170px; --d: 46px; } }
+.fstage__view[data-current="thread"] [data-art="thread"] { opacity: 1; transform: none; }
+.logotry__btn--solid:disabled { opacity: .4; cursor: not-allowed; }
+
+/* lifting loops standing on the four top corners */
+.bag3d__post { position: absolute; left: 50%; top: 0; width: 30px; height: 40px; margin-left: -15px; margin-top: -38px; border: 5px solid #e9e2d5; border-bottom: 0; border-radius: 16px 16px 0 0; box-shadow: 0 0 0 1px var(--ink), inset 0 0 0 1px var(--ink); }
+.bag3d__post.p1 { transform: translateX(calc(var(--w) / 2 - 12px)) translateZ(calc(var(--d) / 2 - 12px)) rotateY(45deg); }
+.bag3d__post.p2 { transform: translateX(calc(var(--w) / -2 + 12px)) translateZ(calc(var(--d) / 2 - 12px)) rotateY(-45deg); }
+.bag3d__post.p3 { transform: translateX(calc(var(--w) / 2 - 12px)) translateZ(calc(var(--d) / -2 + 12px)) rotateY(-45deg); }
+.bag3d__post.p4 { transform: translateX(calc(var(--w) / -2 + 12px)) translateZ(calc(var(--d) / -2 + 12px)) rotateY(45deg); }
+.bag3d:not([data-kind="bulk"]) .bag3d__post { display: none; }
+.bag3d__spin { --w: 210px; --h: 220px; --d: 210px; }
+@media (max-width: 759px) { .bag3d__spin { --w: 150px; --h: 160px; --d: 150px; margin-top: 34px; } }
