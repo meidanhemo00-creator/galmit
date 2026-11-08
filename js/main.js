@@ -321,6 +321,7 @@
     const MAT = { 'קמח ואבקות': 'flour', 'סוכר ומלח': 'sugar', 'גרגרים, זרעים ומספוא': 'grain', 'חול וחומרי בנייה': 'sand', 'פחם': 'coal' };
     const matVal = picked('material').find((v) => MAT[v]);
     view.dataset.mat = MAT[matVal] || '';
+    requestAnimationFrame(placePour); setTimeout(placePour, 750);
     if (matVal) {
       if (view.dataset.current === 'none') {
         view.dataset.current = 'bulk';
@@ -329,6 +330,19 @@
       stageName.textContent = `${first && first !== 'הכל' ? first : 'ביג בג'} · ${matVal.split(',')[0].split(' ')[0]}`;
     }
   };
+
+  // Filling: hang the spout over the centre of the open top and pour the chosen material in
+  function placePour() {
+    const art = $(`[data-art="${view.dataset.current}"]`, view);
+    const top = art && art.querySelector('.il-face-t');
+    const pouring = !!view.dataset.mat && view.dataset.current === 'bulk' && !!top;
+    view.toggleAttribute('data-pouring', pouring);
+    if (!pouring) return;
+    const vr = view.getBoundingClientRect(), r = top.getBoundingClientRect();
+    view.style.setProperty('--px', `${r.left + r.width / 2 - vr.left}px`);
+    view.style.setProperty('--py', `${r.top + r.height * .5 - vr.top}px`);
+  }
+  window.addEventListener('resize', () => requestAnimationFrame(placePour));
 
   // Logo try-on: local preview only, nothing is uploaded
   const stage = $('.fstage', finder);
@@ -531,7 +545,7 @@
     }
     const href = `mailto:${MAILTO}?subject=${encodeURIComponent(subject())}&body=${encodeURIComponent(composeBody())}`;
     window.location.href = href;
-    formStatus.textContent = 'ביקשנו מתוכנת הדואר שלכם לפתוח טיוטה מוכנה. הפנייה תישלח רק אחרי שתלחצו "שלח" שם. לא נפתח כלום? העתיקו את הפרטים או התקשרו 1-700-700-029.';
+    formStatus.textContent = 'ביקשנו מתוכנת הדואר שלכם לפתוח טיוטה מוכנה. הפנייה תישלח רק אחרי שתלחצו "שלח" שם. לא נפתח כלום? העתיקו את הפרטים או התקשרו 08-6167890.';
   });
 
   $('[data-copy]', form).addEventListener('click', async () => {
