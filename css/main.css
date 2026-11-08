@@ -845,3 +845,15 @@ body::after {
 .hero__content { order: 1; }
 .hero__bg::after { background: color-mix(in srgb, var(--brown-deep) 84%, transparent); }
 @media (max-width: 759px) { .hero .hero__title { font-size: 11.4vw; text-wrap: nowrap; } }
+
+/* v3c: clients without frames; Pashut Yarok logo link */
+.clients__list { gap: 28px 12px; }
+.clients__list li { border: 0; border-radius: 0; padding: 8px 20px; height: 88px; }
+.py-logo { display: inline-block; transition: opacity .25s, transform .3s var(--ease-out); }
+.py-logo img { width: 150px; height: auto; }
+.py-logo:hover { opacity: .85; transform: translateY(-2px); }
+.py-logo--footer { margin-top: 6px; background: var(--cream); padding: 8px 10px; border-radius: 3px; }
+.py-logo--footer img { width: 112px; }
+.clients__list li { flex-basis: calc((100% - 48px) / 5); }
+@media (max-width: 759px) { .clients__list li { flex-basis: calc((100% - 24px) / 3); height: 64px; padding: 6px; } }
+.py-logo--footer { align-self: flex-start; justify-self: start; width: max-content; }

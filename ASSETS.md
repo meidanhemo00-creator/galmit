@@ -39,3 +39,5 @@ All from Unsplash (Unsplash License), graded to one warm low-saturation look by 
 |---|---|
 | `assets/photo/hero-*` | photo-1777432048471-d6fae85832f9 (bulk bags stacked outdoors) |
 | `assets/photo/warehouse-*` | photo-1710141530542-f792450e736e (warehouse of stacked white bags) |
+
+| `assets/brand/pashut-yarok.webp` | Pashut Yarok logo (logo-2026.png from ~/Developer/pashut-yarok), links to pashutyarok.co.il | Partner brand asset |
