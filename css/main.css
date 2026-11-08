@@ -225,7 +225,7 @@ body::after {
    CATEGORY BAND (STANQ black band)
    ========================================================= */
 .cats { border-block: 1px solid var(--line); }
-.cats__list { display: grid; grid-template-columns: repeat(4, 1fr); }
+.cats__list { display: grid; grid-template-columns: repeat(5, 1fr); }
 .cats__list li + li { border-inline-start: 1px solid var(--line); }
 .cat { display: grid; grid-template-columns: 1fr 112px; align-items: center; gap: 16px; padding: 26px 20px; text-decoration: none; height: 100%; transition: background-color .3s; }
 .cat:hover { background: rgba(245,241,234,.04); }
@@ -605,10 +605,10 @@ body::after {
   .hero__content > * { max-width: 640px; }
   .hero__content { order: 1; }
   .hero__giant { bottom: 0; }
-  .cats__list { grid-template-columns: repeat(4, minmax(240px, 1fr)); overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; }
+  .cats__list { grid-template-columns: repeat(5, minmax(240px, 1fr)); overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; }
   .cats__list li { scroll-snap-align: start; }
   .explorer { grid-template-columns: 1fr; }
-  .explorer__tabs { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 0; gap: 8px; }
+  .explorer__tabs { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 0; gap: 8px; }
   .explorer__tabs [role="tab"] { grid-template-columns: auto 1fr; min-height: 60px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 4px; }
   .explorer__tabs [role="tab"][aria-selected="true"] { padding-inline-start: 14px; border-color: var(--fg); }
   .explorer__tabs [role="tab"]::before, .explorer__tab-tag { display: none; }
@@ -636,7 +636,7 @@ body::after {
   .hero__actions .btn--line { justify-self: start; }
   .hero__actions { margin-bottom: 32px; }
   .hotspot__card { width: min(230px, 62vw); }
-  .cats__list { grid-template-columns: repeat(4, 78vw); }
+  .cats__list { grid-template-columns: repeat(5, 78vw); }
   .about__grid { grid-template-columns: 1fr; }
   .about__figure { max-width: 300px; }
   .about__facts { grid-template-columns: 1fr; }
@@ -857,3 +857,7 @@ body::after {
 .clients__list li { flex-basis: calc((100% - 48px) / 5); }
 @media (max-width: 759px) { .clients__list li { flex-basis: calc((100% - 24px) / 3); height: 64px; padding: 6px; } }
 .py-logo--footer { align-self: flex-start; justify-self: start; width: max-content; }
+
+.cat { grid-template-columns: 1fr 96px; padding: 28px 18px; }
+.cat__name { font-size: 1.12rem; }
+@media (max-width: 759px) { .explorer__tabs [role="tab"]:last-child { grid-column: span 2; } }

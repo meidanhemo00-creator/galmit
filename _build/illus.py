@@ -422,11 +422,9 @@ def scene_valve(pid='ivl'):
     s.floor_grid(-6, 22, -6, 16, 2)
     s.block_bag(0.5, 1.0, 8.5, 4.6, 9.0, 'woven', valve=True, printarea=False, dims=True)
     s.flush()
-    s.shadow(16, 4, 8, 3.4)
-    for i, r in enumerate([0.0, 0.06, -0.05]):
-        s.pillow(16 + (i % 2) * .2, 4, i * 2.05, rot=r, L=9.5, Wd=5.6)
+    s.block_bag(11.5, 0.5, 7.0, 3.8, 7.4, 'woven', valve=True, printarea=False)
     s.marker((1.9, 7.6, 10.2), 'A', -40, -34)
-    return s.svg('30 0 560 420', 'איור טכני של שק פייה עם תחתית מרובעת, לצד ערימת שקי פוליפרופילן')
+    return s.svg('30 0 560 420', 'איור טכני של שקי פייה בשני גדלים עם תחתית מרובעת ופיית מילוי')
 
 
 def scene_thread(pid='ith'):
