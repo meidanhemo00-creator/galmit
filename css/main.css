@@ -867,3 +867,11 @@ body::after {
 /* finder: Continue sits right under the answers */
 .finder__nav { margin-top: 0; padding-top: 22px; }
 .finder__panel { min-height: 0; }
+
+/* v3d: clearer numerals (normal width, not condensed) */
+.finder__counter { font-family: var(--font); font-stretch: 100%; }
+.finder__num { font-family: var(--font); font-stretch: 100%; font-weight: 800; font-size: clamp(3.6rem, 6vw, 5.6rem); line-height: .9; font-variant-numeric: lining-nums tabular-nums; letter-spacing: -.02em; }
+.finder__of { font-family: var(--font); font-size: 1.4rem; }
+.hero__facts dt { font-family: var(--font); font-stretch: 100%; font-weight: 800; font-size: clamp(1.7rem, 2.4vw, 2.4rem); line-height: 1.05; letter-spacing: -.01em; font-variant-numeric: lining-nums; }
+.action-bar__wa { margin-inline-start: 0; }
+@media (max-width: 759px) { .action-bar { gap: 8px; } .hero__facts dt { font-size: 1.5rem; } }
