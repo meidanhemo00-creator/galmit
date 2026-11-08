@@ -9,8 +9,8 @@
 <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/NotoSansHebrew-var-hebrew.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Assistant-var-hebrew.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/fonts.css?v=45">
-<link rel="stylesheet" href="css/main.css?v=45">
+<link rel="stylesheet" href="css/fonts.css?v=46">
+<link rel="stylesheet" href="css/main.css?v=46">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -218,13 +218,13 @@
         <div class="finder__counter" aria-hidden="true"><span class="finder__num" data-finder-num>01</span><span class="finder__of">/ 03</span></div>
         <ol class="finder__progress" aria-label="שלבים">
           <li class="is-current" data-progress="1"><span class="mono">01</span> מוצר</li>
-          <li data-progress="2"><span class="mono">02</span> דגשים</li>
+          <li data-progress="2"><span class="mono">02</span> חומר</li>
           <li data-progress="3"><span class="mono">03</span> פרטים</li>
         </ol>
 
         <form class="finder__form" data-finder-form novalidate>
           <fieldset class="finder__step is-active" data-step="1">
-            <legend>מה תרצו לארוז?</legend>
+            <legend>במה תרצו לארוז?</legend>
             <p class="finder__sub">אפשר לבחור יותר מתשובה אחת.</p>
             <div class="chips">
               <label class="chip"><input type="checkbox" name="product" value="ביג בג"><span><i class="mono">A</i>ביג בג</span></label>
@@ -238,14 +238,15 @@
           </fieldset>
 
           <fieldset class="finder__step" data-step="2" hidden>
-            <legend>מה חשוב לכם?</legend>
+            <legend>מה תרצו לארוז?</legend>
             <p class="finder__sub">אפשר לבחור יותר מתשובה אחת.</p>
             <div class="chips">
-              <label class="chip"><input type="checkbox" name="need" value="התאמה אישית"><span><i class="mono">A</i>התאמה אישית</span></label>
-              <label class="chip"><input type="checkbox" name="need" value="הדפסה על השק"><span><i class="mono">B</i>הדפסה על השק</span></label>
-              <label class="chip"><input type="checkbox" name="need" value="עיצוב גרפי"><span><i class="mono">C</i>עיצוב גרפי</span></label>
-              <label class="chip"><input type="checkbox" name="need" value="כמויות גדולות"><span><i class="mono">D</i>כמויות גדולות</span></label>
-              <label class="chip chip--all"><input type="checkbox" name="need" value="הכל" data-all><span><i class="mono">E</i>הכל</span></label>
+              <label class="chip"><input type="checkbox" name="material" value="קמח ואבקות"><span><i class="mono">A</i>קמח ואבקות</span></label>
+              <label class="chip"><input type="checkbox" name="material" value="סוכר ומלח"><span><i class="mono">B</i>סוכר ומלח</span></label>
+              <label class="chip"><input type="checkbox" name="material" value="גרגרים, זרעים ומספוא"><span><i class="mono">C</i>גרגרים, זרעים ומספוא</span></label>
+              <label class="chip"><input type="checkbox" name="material" value="חול וחומרי בנייה"><span><i class="mono">D</i>חול וחומרי בנייה</span></label>
+              <label class="chip"><input type="checkbox" name="material" value="פחם"><span><i class="mono">E</i>פחם</span></label>
+              <label class="chip"><input type="checkbox" name="material" value="אחר" data-none><span><i class="mono">F</i>אחר / מעדיפים לא לציין</span></label>
             </div>
           </fieldset>
 
@@ -317,7 +318,7 @@
           <div class="tag__head"><span class="mono label">PACKAGING BRIEF</span><span class="tag__brand">חמו גלמית</span></div>
           <dl class="tag__rows">
             <div data-row="product"><dt>מוצר</dt><dd data-sum="product">—</dd></div>
-            <div data-row="need"><dt>דגשים</dt><dd data-sum="need">—</dd></div>
+            <div data-row="material"><dt>חומר</dt><dd data-sum="material">—</dd></div>
             <div data-row="company"><dt>חברה</dt><dd data-sum="company">—</dd></div>
           </dl>
           <div class="tag__stamp" aria-hidden="true"><span class="mono">READY</span><span>מוכן לשליחה</span></div>
@@ -597,6 +598,6 @@
   </a>
 </div>
 
-<script src="js/main.js?v=45" defer></script>
+<script src="js/main.js?v=46" defer></script>
 </body>
 </html>

@@ -252,7 +252,7 @@
   };
   const stepValid = (i) => {
     if (i === 0) return picked('product').length > 0;
-    if (i === 1) return picked('need').length > 0;
+    if (i === 1) return picked('material').length > 0;
     if (i === 2) return fdName.value.trim().length >= 2;
     return true;
   };
@@ -261,7 +261,7 @@
     const lines = ['היי עמית, הגעתי מהאתר של חמו גלמית.', `שם: ${fdName.value.trim()}`];
     if (fdCompany.value.trim()) lines.push(`חברה: ${fdCompany.value.trim()}`);
     lines.push(`מתעניינים ב: ${pickedText('product')}`);
-    lines.push(`חשוב לנו: ${pickedText('need')}`);
+    lines.push(`אורזים: ${pickedText('material')}`);
     if (fdQty.value.trim()) lines.push(`כמות משוערת: ${fdQty.value.trim()}`);
     if (logoURL) lines.push('יש לנו לוגו, אשלח אותו כאן.');
     return lines.join('\n');
@@ -297,7 +297,7 @@
 
   // Live brief: the tag fills and the stage draws the likely packaging as answers come in
   const renderLive = (changed) => {
-    const vals = { product: pickedText('product'), need: pickedText('need'), company: fdCompany.value.trim() };
+    const vals = { product: pickedText('product'), material: pickedText('material'), company: fdCompany.value.trim() };
     Object.entries(vals).forEach(([k, val]) => {
       const dd = $(`[data-sum="${k}"]`, tag);
       const v = val || '—';
@@ -397,7 +397,7 @@
     if (map[one]) setCategory(map[one]);
     $('#f-name').value ||= fdName.value.trim();
     $('#f-company').value ||= fdCompany.value.trim();
-    const lines = [`מתעניינים ב: ${pickedText('product')}`, `חשוב לנו: ${pickedText('need')}`];
+    const lines = [`מתעניינים ב: ${pickedText('product')}`, `אורזים: ${pickedText('material')}`];
     if (fdQty.value.trim()) lines.push(`כמות משוערת: ${fdQty.value.trim()}`);
     const text = lines.join('\n') + '\n';
     const prev = fNeed.value.trim();

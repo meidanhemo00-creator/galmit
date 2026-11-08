@@ -864,3 +864,6 @@ body::after {
 /* client logos in their own colours */
 .clients__list img { opacity: 1; max-height: 58px; }
 .clients__list img[src*="roth"], .clients__list img[src*="mifratz"], .clients__list img[src*="shtibel"] { max-height: 70px; }
+/* finder: Continue sits right under the answers */
+.finder__nav { margin-top: 0; padding-top: 22px; }
+.finder__panel { min-height: 0; }
