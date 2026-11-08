@@ -317,6 +317,13 @@
       });
     }
     stageName.textContent = first ? (first === 'הכל' ? 'כל המשפחות' : first) : (picked('product').length ? 'נבחר יחד עם הצוות' : 'עוד לא נבחר');
+    // what goes inside: draw the first chosen material as a heap next to the bag
+    const MAT = { 'קמח ואבקות': 'flour', 'סוכר ומלח': 'sugar', 'גרגרים, זרעים ומספוא': 'grain', 'חול וחומרי בנייה': 'sand', 'פחם': 'coal' };
+    const matVal = picked('material').find((v) => MAT[v]);
+    const matKey = MAT[matVal] || '';
+    $$('[data-mat]', view).forEach((m) => m.classList.toggle('is-on', m.dataset.mat === matKey));
+    $('[data-mat-name]', view).textContent = matVal || '';
+    view.classList.toggle('has-mat', !!matKey);
   };
 
   // Logo try-on: local preview only, nothing is uploaded

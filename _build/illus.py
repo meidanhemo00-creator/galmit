@@ -438,6 +438,93 @@ def scene_thread(pid='ith'):
     return s.svg('30 20 540 400', 'איור טכני של גלילי חוט תפירה בשלושה גדלים')
 
 
+def scene_valve_flat():
+    """flat technical sheet of a valve sack: front above back, with example dimensions"""
+    P = lambda pts: ' '.join(f'{x},{y}' for x, y in pts)
+    def dim_h(x1, x2, y, label):
+        return (f'<path class="il-dim" d="M{x1} {y} H{x2} M{x1} {y-5} V{y+5} M{x2} {y-5} V{y+5}"/>'
+                f'<text class="il-dimtext il-dimtext--lg" x="{(x1+x2)/2}" y="{y-9}" text-anchor="middle">{label}</text>')
+    def dim_v(x, y1, y2, label, side=1):
+        tx = x + 10 * side
+        return (f'<path class="il-dim" d="M{x} {y1} V{y2} M{x-5} {y1} H{x+5} M{x-5} {y2} H{x+5}"/>'
+                f'<text class="il-dimtext il-dimtext--lg" x="{tx}" y="{(y1+y2)/2 + 5}" text-anchor="{"start" if side > 0 else "end"}">{label}</text>')
+    g = []
+    x0, x1, c, H = 100, 270, 14, 194
+    # FRONT
+    y0 = 50; y1 = y0 + H
+    g.append(f'<polygon class="il-face-r" points="{P([(x0,y0),(x1-c,y0),(x1,y0+c),(x1,y1-c),(x1-c,y1),(x0+c,y1),(x0,y1-c)])}"/>')
+    g.append(f'<text class="il-sheetlabel" x="{(x0+x1)/2}" y="{(y0+y1)/2+10}">חזית</text>')
+    g.append(dim_h(x0, x1, y0 - 16, '50 ס״מ'))
+    g.append(dim_v(x1 + 18, y0, y1, '57 ס״מ', 1))
+    # BACK
+    y0 = 300; y1 = y0 + H
+    g.append(f'<polygon class="il-face-r" points="{P([(x0,y0+22),(x0+22,y0),(x1,y0),(x1,y1-c),(x1-c,y1),(x0+c,y1),(x0,y1-c)])}"/>')
+    tb0, tb1 = y0 + 6, y0 + 57
+    g.append(f'<polygon class="il-shade" points="{P([(x0+22,tb0),(x1,tb0),(x1,tb1),(x0+22,tb1)])}"/>')
+    g.append(f'<polygon class="il-face-t" points="{P([(x0,y0+22),(x0+22,tb0),(x0+22,tb1),(x0,tb1-10)])}"/>')
+    g.append(f'<path class="il-stitch" d="M{x0+26} {tb1-6} H{x1-4}"/>')
+    bb0, bb1 = y1 - 57, y1 - 6
+    g.append(f'<polygon class="il-shade" points="{P([(x0+20,bb0),(x1-20,bb0),(x1-4,bb1-14),(x1-20,bb1),(x0+20,bb1),(x0+4,bb1-14)])}"/>')
+    g.append(f'<path class="il-fold" d="M{x0+20} {bb0} L{x0+4} {bb1-14} L{x0+20} {bb1} M{x1-20} {bb0} L{x1-4} {bb1-14} L{x1-20} {bb1}"/>')
+    g.append(f'<text class="il-sheetlabel" x="{(x0+x1)/2}" y="{(y0+y1)/2+10}">גב</text>')
+    g.append(dim_v(x1 + 18, tb0, tb1, '15 ס״מ', 1))
+    g.append(dim_v(x1 + 18, bb0, bb1, '15 ס״מ', 1))
+    g.append(f'<path class="il-lead" d="M{x0+9} {y0+30} L{x0-14} {y0-14}"/><circle class="il-dot" cx="{x0+9}" cy="{y0+30}" r="2.4"/>'
+             f'<text class="il-callout" x="{x0-16}" y="{y0-18}" text-anchor="middle">פיית מילוי</text>')
+    g.append(f'<path class="il-lead" d="M{x0+40} {bb1-20} L{x0-10} {bb1+24}"/><circle class="il-dot" cx="{x0+40}" cy="{bb1-20}" r="2.4"/>'
+             f'<text class="il-callout" x="{x0-10}" y="{bb1+40}" text-anchor="middle">תחתית מרובעת</text>')
+    g.append(f'<text class="il-note" x="{(x0+x1)/2}" y="{y1+62}" text-anchor="middle">מידות לדוגמה. כל שק נבנה לפי המידות שלכם.</text>')
+    return (f'<svg class="il il-sheet" viewBox="30 0 330 580" role="img" xmlns="http://www.w3.org/2000/svg">'
+            f'<title>שרטוט שק פייה: חזית וגב, עם פיית מילוי ותחתית מרובעת</title>{"".join(g)}</svg>')
+
+
+def scene_material(kind, seed=7):
+    """a heap of what goes into the bag, drawn in the same ink style"""
+    import random, math
+    rnd = random.Random(seed + len(kind))
+    cid = f'mclip-{kind}'
+    mound = 'M-96 0 C-80 -18 -52 -66 -6 -74 C34 -78 70 -40 96 0 Z'
+    base = '<ellipse class="il-hatch-base" cx="0" cy="2" rx="104" ry="16"/>'
+    tex = []
+    if kind == 'flour':
+        for _ in range(170):
+            x, y = rnd.uniform(-95, 95), rnd.uniform(-76, 0)
+            tex.append(f'<circle class="il-grain-fine" cx="{x:.1f}" cy="{y:.1f}" r=".7"/>')
+        tex.append('<path class="il-edge-thin" d="M-60 -30 C-30 -48 10 -52 40 -36"/>')
+    elif kind == 'sugar':
+        for _ in range(90):
+            x, y, a = rnd.uniform(-95, 95), rnd.uniform(-76, 0), rnd.uniform(0, 90)
+            tex.append(f'<rect class="il-crystal" x="{x:.1f}" y="{y:.1f}" width="3.2" height="3.2" transform="rotate({a:.0f} {x:.1f} {y:.1f})"/>')
+    elif kind == 'grain':
+        for _ in range(85):
+            x, y, a = rnd.uniform(-95, 95), rnd.uniform(-76, 0), rnd.uniform(-60, 60)
+            tex.append(f'<ellipse class="il-seed" cx="{x:.1f}" cy="{y:.1f}" rx="3.6" ry="1.9" transform="rotate({a:.0f} {x:.1f} {y:.1f})"/>')
+    elif kind == 'sand':
+        for _ in range(260):
+            x, y = rnd.uniform(-95, 95), rnd.uniform(-76, 0)
+            tex.append(f'<circle class="il-grain-fine" cx="{x:.1f}" cy="{y:.1f}" r=".9"/>')
+        for _ in range(16):
+            x, y = rnd.uniform(-85, 85), rnd.uniform(-60, -4)
+            tex.append(f'<ellipse class="il-pebble" cx="{x:.1f}" cy="{y:.1f}" rx="{rnd.uniform(2.5, 4.5):.1f}" ry="{rnd.uniform(1.8, 3):.1f}"/>')
+    if kind == 'coal':
+        chunks = []
+        for yy, n in [(0, 9), (-14, 7), (-28, 5), (-42, 3), (-54, 2)]:
+            w = n * 19
+            for i in range(n):
+                cx = -w / 2 + 10 + i * 19 + rnd.uniform(-3, 3); cy = yy + rnd.uniform(-2, 2)
+                pts = []
+                for k in range(6):
+                    ang = k / 6 * 6.283 + rnd.uniform(-.3, .3); r = rnd.uniform(7, 11)
+                    pts.append(f'{cx + r * math.cos(ang):.1f},{cy + r * .75 * math.sin(ang):.1f}')
+                chunks.append(f'<polygon class="il-chunk" points="{" ".join(pts)}"/>')
+        body = base + ''.join(chunks)
+    else:
+        body = (f'<defs><clipPath id="{cid}"><path d="{mound}"/></clipPath></defs>{base}'
+                f'<path class="il-heap" d="{mound}"/><g clip-path="url(#{cid})">{"".join(tex)}</g>'
+                f'<path class="il-heap-line" d="{mound}"/>')
+    return f'<svg class="il il-mat" viewBox="-112 -92 224 116" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">{body}</svg>'
+
+
 def scene_tile(kind, pid, logo=False):
     """compact versions for the category strip"""
     s = Scene(pid, 12, 200, 170)
@@ -607,6 +694,9 @@ if __name__ == '__main__':
     for k in ('bulk', 'pp', 'paper', 'coal'):
         write('fd-' + k, scene_tile(k, 'f' + k[:2], logo=True))
     write('valve', scene_valve())
+    write('valve-flat', scene_valve_flat())
+    for k in ('flour', 'sugar', 'grain', 'sand', 'coal'):
+        write('mat-' + k, scene_material(k))
     write('thread', scene_thread())
     for k in ('valve', 'thread'):
         write('tile-' + k, scene_tile(k, 't' + k[:2]))
