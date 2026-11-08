@@ -469,10 +469,6 @@ def scene_valve_flat():
     g.append(f'<text class="il-sheetlabel" x="{(x0+x1)/2}" y="{(y0+y1)/2+10}">גב</text>')
     g.append(dim_v(x1 + 18, tb0, tb1, '15 ס״מ', 1))
     g.append(dim_v(x1 + 18, bb0, bb1, '15 ס״מ', 1))
-    g.append(f'<path class="il-lead" d="M{x0+9} {y0+30} L{x0-14} {y0-14}"/><circle class="il-dot" cx="{x0+9}" cy="{y0+30}" r="2.4"/>'
-             f'<text class="il-callout" x="{x0-16}" y="{y0-18}" text-anchor="middle">פיית מילוי</text>')
-    g.append(f'<path class="il-lead" d="M{x0+40} {bb1-20} L{x0-10} {bb1+24}"/><circle class="il-dot" cx="{x0+40}" cy="{bb1-20}" r="2.4"/>'
-             f'<text class="il-callout" x="{x0-10}" y="{bb1+40}" text-anchor="middle">תחתית מרובעת</text>')
     g.append(f'<text class="il-note" x="{(x0+x1)/2}" y="{y1+62}" text-anchor="middle">מידות לדוגמה. כל שק נבנה לפי המידות שלכם.</text>')
     return (f'<svg class="il il-sheet" viewBox="30 0 330 580" role="img" xmlns="http://www.w3.org/2000/svg">'
             f'<title>שרטוט שק פייה: חזית וגב, עם פיית מילוי ותחתית מרובעת</title>{"".join(g)}</svg>')
