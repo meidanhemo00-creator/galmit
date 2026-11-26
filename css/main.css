@@ -983,3 +983,14 @@ body::after {
 .footer__legal a { text-decoration: underline; text-underline-offset: .2em; }
 .form-privacy { font-size: .9rem; color: var(--soft); margin-top: -6px; }
 .form-privacy a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+
+/* v66: 200% text / 400% zoom reflow */
+.cats__list { grid-template-columns: repeat(5, minmax(min(100%, 11em), 1fr)); overflow-x: auto; scroll-snap-type: x mandatory; }
+.hero__title { overflow-wrap: anywhere; }
+.hero__title .line { overflow: visible clip; }
+.hero__title .line > span { max-width: 100%; }
+.contact__grid > *, .contact__form-body > *, .field { min-width: 0; }
+.field-row { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13em), 1fr)); }
+html, body { overflow-x: clip; }
+.contact__details li > *, .footer__contact a, .legal a { min-width: 0; overflow-wrap: anywhere; }
+.tag__stamp { max-width: calc(100% - 24px); overflow-wrap: anywhere; }
