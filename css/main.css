@@ -37,7 +37,7 @@
 .section--light2 { --bg: var(--paper-2); }
 .section--warm { --bg: var(--paper); --line: rgba(31,26,22,.18); }
 .ctx-dark {
-  --bg: var(--ink); --fg: var(--cream); --soft: rgba(245,241,234,.72); --line: rgba(245,241,234,.15); --accent: var(--olive-light);
+  --bg: var(--ink); --fg: var(--cream); --soft: rgba(245,241,234,.86); --line: rgba(245,241,234,.15); --accent: var(--olive-light);
   --i-r: var(--ink); --i-l: var(--ink); --i-t: color-mix(in srgb, var(--brown) 88%, var(--ink)); --i-wood: color-mix(in srgb, var(--brown) 92%, var(--ink)); --i-gap: var(--ink);
   color: var(--fg);
 }
@@ -308,7 +308,7 @@ body::after {
    FINDER: live configurator on deep espresso (the page's one contrast block)
    ========================================================= */
 .section--deep, .cats, .site-footer {
-  --bg: var(--brown); --fg: var(--cream); --soft: rgba(245,241,234,.74); --line: rgba(245,241,234,.22); --accent: var(--cream);
+  --bg: var(--brown); --fg: var(--cream); --soft: rgba(245,241,234,.88); --line: rgba(245,241,234,.22); --accent: var(--cream);
   --i-r: color-mix(in srgb, var(--brown) 82%, var(--cream)); --i-l: color-mix(in srgb, var(--brown) 88%, var(--ink)); --i-t: color-mix(in srgb, var(--brown) 70%, var(--cream));
   --i-wood: color-mix(in srgb, var(--brown) 85%, var(--ink)); --i-gap: var(--ink);
   background-color: var(--bg); background-image: none; color: var(--fg);
@@ -798,12 +798,12 @@ body::after {
 /* ink section */
 .section--ink { background: var(--ink); color: var(--fg); }
 .section--ink .display { color: var(--cream); }
-.section--ink .muted { color: rgba(245,241,234,.55); }
+.section--ink .muted { color: rgba(245,241,234,.78); }
 .explorer__visual.ctx-light { background: var(--cream); }
 .explorer__visual .pv { padding: 7% 5% 7% 42%; }
 .explorer__info { --fg: var(--ink); --soft: rgba(31,26,22,.7); --line: rgba(31,26,22,.16); --accent: var(--brown); color: var(--ink); background: var(--paper); border: 1px solid rgba(31,26,22,.12); }
 .explorer__info .btn--light { --b-fg: var(--ink); --b-bd: rgba(31,26,22,.3); }
-.products .explorer__tabs [role="tab"] { color: rgba(245,241,234,.6); border-color: rgba(245,241,234,.14); }
+.products .explorer__tabs [role="tab"] { color: rgba(245,241,234,.84); border-color: rgba(245,241,234,.14); }
 .products .explorer__tabs [role="tab"][aria-selected="true"] { color: var(--cream); }
 
 /* category tiles: engineered drawings on the brown band */
@@ -976,3 +976,10 @@ body::after {
 .contact__thanks { display: grid; gap: 10px; padding: 12px 0; font-size: 1.08rem; line-height: 1.6; }
 .contact__thanks:focus { outline: none; }
 .hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* v65: contrast (IS 5568 / WCAG AA) */
+.cat__text .mono { opacity: .9; }
+
+.footer__legal a { text-decoration: underline; text-underline-offset: .2em; }
+.form-privacy { font-size: .9rem; color: var(--soft); margin-top: -6px; }
+.form-privacy a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
