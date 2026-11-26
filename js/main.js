@@ -151,9 +151,8 @@
 
   /* ---------- Contact form references (used by explorer + finder) ---------- */
   const form = $('[data-contact-form]');
-  const fCategory = $('#f-category');
   const fNeed = $('#f-need');
-  const setCategory = (name) => { if (name) fCategory.value = name; };
+  const setCategory = (name) => { if (name && !fNeed.value.trim()) fNeed.value = `${name}. `; };
 
   /* ---------- Product explorer ---------- */
   const explorer = $('[data-explorer]');
@@ -212,7 +211,6 @@
   $('[data-inquire]', explorer).addEventListener('click', () => {
     const name = CATEGORIES[current].name;
     setCategory(name);
-    if (!fNeed.value.trim()) fNeed.value = `פנייה בנושא ${name}.\n`;
   });
 
   // Links elsewhere that point at a category
@@ -462,10 +460,6 @@
   });
   // Email fallback: copy the brief into the contact form
   $('[data-finder-send]', finder).addEventListener('click', () => {
-    const prods = picked('product');
-    const one = prods.length === 1 ? prods[0] : '';
-    const map = { 'ביג בג': 'ביג בג', 'שקי פייה': 'שקי פייה', 'שקי פוליפרופילן': 'שקי פוליפרופילן', 'שקי פחם': 'שקי פחם', 'חוטי תפירה': 'חוטי תפירה' };
-    if (map[one]) setCategory(map[one]);
     $('#f-name').value ||= fdName.value.trim();
     $('#f-company').value ||= fdCompany.value.trim();
     const lines = [`מתעניינים ב: ${pickedText('product')}`, `אורזים: ${pickedText('material')}`];
@@ -535,72 +529,64 @@
     btn.closest('.acc').classList.toggle('is-open', open);
   }));
 
-  /* ---------- Contact form: validation + email composition ---------- */
+  /* ---------- Contact form: validate + send (FormSubmit) ---------- */
   const formStatus = $('[data-form-status]', form);
-  const MAILTO = 'bags@pashutyarok.co.il';
-  const fields = {
-    name: $('#f-name'), company: $('#f-company'), phone: $('#f-phone'), email: $('#f-email'), need: fNeed
-  };
+  const submitBtn = $('[data-submit]', form);
+  const fields = { name: $('#f-name'), phone: $('#f-phone'), company: $('#f-company'), need: fNeed };
   let attempted = false;
 
   const setErr = (key, msg) => {
-    const el = fields[key];
     const err = $(`[data-err-for="${key}"]`, form);
     if (err) err.textContent = msg || '';
-    el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    fields[key].setAttribute('aria-invalid', msg ? 'true' : 'false');
   };
-
   const validate = () => {
-    const v = (k) => fields[k].value.trim();
     const errors = {};
-    if (v('name').length < 2) errors.name = 'נא למלא שם מלא.';
-    const digits = v('phone').replace(/\D/g, '');
-    const hasPhone = digits.length > 0;
-    const hasEmail = v('email').length > 0;
-    if (hasPhone && (digits.length < 9 || digits.length > 12)) errors.phone = 'מספר הטלפון נראה חסר. נא לבדוק.';
-    if (hasEmail && (fields.email.validity.typeMismatch || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')))) errors.email = 'כתובת האימייל לא תקינה.';
-    if (!hasPhone && !hasEmail) { errors.phone = 'נא להשאיר טלפון או אימייל.'; }
-    if (v('need').length < 5) errors.need = 'ספרו לנו בכמה מילים מה אתם צריכים.';
-    ['name', 'phone', 'email', 'need'].forEach((k) => setErr(k, errors[k]));
+    if (fields.name.value.trim().length < 2) errors.name = 'נא למלא שם.';
+    const digits = fields.phone.value.replace(/\D/g, '');
+    if (digits.length < 9 || digits.length > 12) errors.phone = digits ? 'המספר נראה חסר. נא לבדוק.' : 'נא למלא טלפון.';
+    ['name', 'phone'].forEach((k) => setErr(k, errors[k]));
     return errors;
   };
+  ['name', 'phone'].forEach((k) => fields[k].addEventListener('input', () => { if (attempted) validate(); }));
 
-  Object.values(fields).forEach((el) => el.addEventListener('input', () => { if (attempted) validate(); }));
-
-  const composeBody = () => {
-    const v = (k) => fields[k].value.trim();
-    const lines = [`שם מלא: ${v('name')}`];
-    if (v('company')) lines.push(`חברה: ${v('company')}`);
-    if (v('phone')) lines.push(`טלפון: ${v('phone')}`);
-    if (v('email')) lines.push(`אימייל: ${v('email')}`);
-    if (fCategory.value) lines.push(`סוג אריזה: ${fCategory.value}`);
-    lines.push('', 'תיאור הצורך:', v('need'));
-    return lines.join('\n');
-  };
-  const subject = () => `פנייה מהאתר${fCategory.value ? `: ${fCategory.value}` : ''}${fields.company.value.trim() ? ` · ${fields.company.value.trim()}` : ''}`;
-
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     attempted = true;
     const errors = validate();
-    const first = ['name', 'phone', 'email', 'need'].find((k) => errors[k]);
-    if (first) {
-      formStatus.textContent = 'יש כמה פרטים להשלים לפני שממשיכים.';
-      fields[first].focus();
-      return;
-    }
-    const href = `mailto:${MAILTO}?subject=${encodeURIComponent(subject())}&body=${encodeURIComponent(composeBody())}`;
-    window.location.href = href;
-    formStatus.textContent = 'ביקשנו מתוכנת הדואר שלכם לפתוח טיוטה מוכנה. הפנייה תישלח רק אחרי שתלחצו "שלח" שם. לא נפתח כלום? העתיקו את הפרטים או התקשרו 08-6167890.';
-  });
-
-  $('[data-copy]', form).addEventListener('click', async () => {
-    const text = `${subject()}\n\n${composeBody()}`;
+    const first = ['name', 'phone'].find((k) => errors[k]);
+    if (first) { formStatus.textContent = ''; fields[first].focus(); return; }
+    if (form.elements._honey.value) return;
+    const v = (k) => fields[k].value.trim();
+    const payload = {
+      _subject: `פנייה מהאתר: ${v('name')}${v('company') ? ` · ${v('company')}` : ''}`,
+      _template: 'table',
+      _captcha: 'false',
+      'שם': v('name'),
+      'טלפון': v('phone'),
+      'חברה': v('company') || '-',
+      'מה אורזים': v('need') || '-'
+    };
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'שולחים...';
+    formStatus.textContent = '';
     try {
-      await navigator.clipboard.writeText(text);
-      formStatus.textContent = `הפרטים הועתקו. אפשר להדביק אותם במייל ל-${MAILTO}.`;
+      const res = await fetch('https://formsubmit.co/ajax/bags@pashutyarok.co.il', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || String(data.success) === 'false') throw new Error(data.message || res.status);
+      $('[data-form-body]', form).hidden = true;
+      const thanks = $('[data-form-thanks]', form);
+      thanks.hidden = false;
+      thanks.focus({ preventScroll: true });
     } catch {
-      formStatus.textContent = `לא הצלחנו להעתיק אוטומטית. אפשר לכתוב ישירות ל-${MAILTO}.`;
+      formStatus.innerHTML = 'משהו השתבש בשליחה. אפשר לכתוב לעמית ב<a href="https://wa.me/972522227856" target="_blank" rel="noopener">וואטסאפ</a> או להתקשר <a href="tel:+97286167890"><bdi dir="ltr">08-6167890</bdi></a>.';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'שליחה';
     }
   });
 })();

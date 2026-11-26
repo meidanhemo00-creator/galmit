@@ -964,3 +964,15 @@ body::after {
 .bag3d:not([data-kind="bulk"]) .bag3d__post { display: none; }
 .bag3d__spin { --w: 210px; --h: 220px; --d: 210px; }
 @media (max-width: 759px) { .bag3d__spin { --w: 150px; --h: 160px; --d: 150px; margin-top: 34px; } }
+
+/* v63: simple contact form */
+.contact__form-body { display: grid; gap: 18px; }
+.contact__form-title { font-weight: 800; font-size: clamp(1.25rem, 2vw, 1.5rem); line-height: 1.2; }
+.contact__form textarea { min-height: 96px; }
+.contact__submit { justify-self: stretch; justify-content: center; min-height: 56px; font-size: 1.08rem; }
+.contact__submit:disabled { opacity: .6; cursor: progress; }
+.form-status a, .contact__thanks a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+.form-status { color: var(--brown); }
+.contact__thanks { display: grid; gap: 10px; padding: 12px 0; font-size: 1.08rem; line-height: 1.6; }
+.contact__thanks:focus { outline: none; }
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }

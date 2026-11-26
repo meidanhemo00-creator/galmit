@@ -10,7 +10,7 @@
 <link rel="preload" href="assets/fonts/NotoSansHebrew-var-hebrew.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Assistant-var-hebrew.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/fonts.css?v=62">
-<link rel="stylesheet" href="css/main.css?v=62">
+<link rel="stylesheet" href="css/main.css?v=63">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -536,57 +536,37 @@
       </ul>
     </div>
 
-    <form class="contact__form" data-contact-form novalidate aria-describedby="form-note">
-      <div class="field-row">
-        <div class="field">
-          <label for="f-name">שם מלא <span class="req" aria-hidden="true">*</span></label>
-          <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err">
-          <p class="field__err" id="f-name-err" data-err-for="name"></p>
+    <form class="contact__form" data-contact-form novalidate action="https://formsubmit.co/bags@pashutyarok.co.il" method="POST">
+      <div class="contact__form-body" data-form-body>
+        <p class="contact__form-title">השאירו פרטים ונחזור אליכם</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-name">שם מלא <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err">
+            <p class="field__err" id="f-name-err" data-err-for="name"></p>
+          </div>
+          <div class="field">
+            <label for="f-phone">טלפון <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" required aria-describedby="f-phone-err">
+            <p class="field__err" id="f-phone-err" data-err-for="phone"></p>
+          </div>
         </div>
         <div class="field">
           <label for="f-company">שם החברה</label>
           <input id="f-company" name="company" type="text" autocomplete="organization">
         </div>
-      </div>
-      <div class="field-row">
         <div class="field">
-          <label for="f-phone">טלפון</label>
-          <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" aria-describedby="f-phone-err contact-hint">
-          <p class="field__err" id="f-phone-err" data-err-for="phone"></p>
+          <label for="f-need">מה אתם אורזים?</label>
+          <textarea id="f-need" name="message" rows="3" placeholder="לא חובה. סוג שק, חומר, כמות משוערת..."></textarea>
         </div>
-        <div class="field">
-          <label for="f-email">אימייל</label>
-          <input id="f-email" name="email" type="email" autocomplete="email" dir="ltr" aria-describedby="f-email-err contact-hint">
-          <p class="field__err" id="f-email-err" data-err-for="email"></p>
-        </div>
+        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn btn--primary contact__submit" type="submit" data-submit>שליחה</button>
+        <p class="form-status" role="status" aria-live="polite" data-form-status></p>
       </div>
-      <p class="field__hint" id="contact-hint">מספיק טלפון או אימייל, אחד מהם לפחות.</p>
-      <div class="field">
-        <label for="f-category">סוג האריזה</label>
-        <div class="select">
-          <select id="f-category" name="category">
-            <option value="">עוד לא בטוחים</option>
-            <option value="ביג בג">ביג בג</option>
-            <option value="שקי פייה">שקי פייה</option>
-            <option value="שקי פוליפרופילן">שקי פוליפרופילן</option>
-            <option value="שקי פחם">שקי פחם</option>
-            <option value="חוטי תפירה">חוטי תפירה</option>
-          </select>
-        </div>
+      <div class="contact__thanks" data-form-thanks hidden tabindex="-1">
+        <p class="contact__form-title">תודה, קיבלנו.</p>
+        <p>נחזור אליכם בהקדם. רוצים מהר יותר? <a href="https://wa.me/972522227856" target="_blank" rel="noopener">וואטסאפ לעמית</a> או <a href="tel:+97286167890"><bdi dir="ltr">08-6167890</bdi></a>.</p>
       </div>
-      <div class="field">
-        <label for="f-need">תיאור הצורך <span class="req" aria-hidden="true">*</span></label>
-        <textarea id="f-need" name="need" rows="5" required aria-describedby="f-need-err f-need-hint" placeholder="מה אורזים, כמויות משוערות, מידות, הדפסה..."></textarea>
-        <p class="field__hint" id="f-need-hint">התשובות משלב ההתאמה נכנסות לכאן אוטומטית. אפשר לערוך אותן.</p>
-        <p class="field__err" id="f-need-err" data-err-for="need"></p>
-      </div>
-
-      <div class="form-foot">
-        <button class="btn btn--primary" type="submit">פתיחת מייל עם הפרטים</button>
-        <button class="btn btn--text btn--text-light" type="button" data-copy>העתקת הפרטים</button>
-      </div>
-      <p class="form-note" id="form-note">הטופס לא נשלח מכאן ישירות. הכפתור פותח טיוטת מייל לכתובת <bdi dir="ltr">bags@pashutyarok.co.il</bdi> בתוכנת הדואר שלכם, עם כל הפרטים. אפשר גם להתקשר.</p>
-      <p class="form-status" role="status" aria-live="polite" data-form-status></p>
     </form>
   </div>
 </section>
@@ -627,6 +607,6 @@
   </a>
 </div>
 
-<script src="js/main.js?v=62" defer></script>
+<script src="js/main.js?v=63" defer></script>
 </body>
 </html>
