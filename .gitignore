@@ -3,3 +3,4 @@
 _src/
 .vercel
 .env*
+node_modules/

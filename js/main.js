@@ -558,26 +558,28 @@
     if (first) { formStatus.textContent = ''; fields[first].focus(); return; }
     if (form.elements._honey.value) return;
     const v = (k) => fields[k].value.trim();
-    const payload = {
-      _subject: `פנייה מהאתר: ${v('name')}${v('company') ? ` · ${v('company')}` : ''}`,
-      _template: 'table',
-      _captcha: 'false',
-      'שם': v('name'),
-      'טלפון': v('phone'),
-      'חברה': v('company') || '-',
-      'מה אורזים': v('need') || '-'
-    };
+    const data = { name: v('name'), phone: v('phone'), company: v('company'), message: v('need') };
     submitBtn.disabled = true;
     submitBtn.textContent = 'שולחים...';
     formStatus.textContent = '';
+    // Our own SMTP endpoint first; FormSubmit only if SMTP isn't configured yet.
+    const viaSmtp = () => fetch('/api/contact', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+    });
+    const viaFormSubmit = () => fetch('https://formsubmit.co/ajax/bags@pashutyarok.co.il', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        _subject: `פנייה מהאתר: ${data.name}${data.company ? ` · ${data.company}` : ''}`,
+        _template: 'table', _captcha: 'false',
+        'שם': data.name, 'טלפון': data.phone, 'חברה': data.company || '-', 'מה אורזים': data.message || '-'
+      })
+    });
     try {
-      const res = await fetch('https://formsubmit.co/ajax/bags@pashutyarok.co.il', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || String(data.success) === 'false') throw new Error(data.message || res.status);
+      let res = await viaSmtp();
+      if (res.status === 503 || res.status === 404 || res.status === 405) res = await viaFormSubmit();
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || out.ok === false || String(out.success) === 'false') throw new Error(res.status);
       $('[data-form-body]', form).hidden = true;
       const thanks = $('[data-form-thanks]', form);
       thanks.hidden = false;
